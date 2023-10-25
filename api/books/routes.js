@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer");
+const upload = require("../../middleware/multer");
 
 const router = express.Router();
 const {
@@ -12,7 +12,7 @@ const {
 
 router.get("/books", getAllBooks);
 
-router.post("/books/createBook", createNewBook);
+router.post("/books/createBook", upload.single("image"), createNewBook);
 
 router.get("/books/:id", getBookById);
 

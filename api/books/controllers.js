@@ -7,6 +7,9 @@ const getAllBooks = async (req, res) => {
 };
 
 const createNewBook = async (req, res) => {
+  req.body.image = req.file
+    ? req.file.path
+    : "https://birkhauser.com/product-not-found.png";
   const book = await Book.create(req.body);
   return res.status(201).json(book);
 };
