@@ -1,9 +1,15 @@
-const { startSession } = require("mongoose");
 const Book = require("../../model/Book");
 
-const getAllBooks = async (req, res) => {
-  const book = await Book.find();
-  res.status(200).json(book);
+const getAllBooks = async (req, res, next) => {
+  try {
+    const book = await Book.find();
+    if (book.length === 0) {
+      throw new Error("Error occurred while fetching books.");
+    }
+    res.status(200).json(book);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const createNewBook = async (req, res) => {
@@ -38,7 +44,7 @@ const updateBook = async (req, res) => {
 
 const deleteBook = async (req, res) => {
   const { bookId } = req.params;
-  const bookToDelete = await Book.findOne({ _id: bookId });
+  const bookToDelete = await Book.findById({ _id: bookId });
   if (!bookToDelete) {
     return res.status(404).json({ message: "Account not found" });
   }
